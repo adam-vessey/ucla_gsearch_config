@@ -125,14 +125,14 @@
         if they are to support managed datstreams -->
 
       <!-- TODO: would like to get rid of the need for the content param -->
-      <xsl:for-each select="foxml:datastream">
+      <xsl:for-each select="foxml:datastream[@STATE='A']">
         <xsl:choose>
           <xsl:when test="@CONTROL_GROUP='X'">
             <xsl:apply-templates select="foxml:datastreamVersion[last()]">
               <xsl:with-param name="content" select="foxml:datastreamVersion[last()]/foxml:xmlContent"/>
             </xsl:apply-templates>
           </xsl:when>
-          <xsl:when test="@CONTROL_GROUP='M' and (@MIMETYPE='text/xml' or @MIMETYPE='application/xml' or @MIMETYPE='application/rdf+xml' or @MIMETYPE='text/html')">
+          <xsl:when test="@CONTROL_GROUP='M' and foxml:datastreamVersion[last()][@MIMETYPE='text/xml' or @MIMETYPE='application/xml' or @MIMETYPE='application/rdf+xml' or @MIMETYPE='text/html']">
             <!-- TODO: should do something about mime type filtering
               text/plain should use the getDatastreamText extension because document will only work for xml docs
               xml files should use the document function
