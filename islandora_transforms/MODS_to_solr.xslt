@@ -519,23 +519,6 @@
         </xsl:attribute>
         <xsl:value-of select="text()"/>
       </field>
-      <xsl:if test="position() = 1"><!-- use the first for a sortable field -->
-        <field>
-          <xsl:attribute name="name">
-            <!-- Attach the name of the 'point' attribute to the date field's name -->
-            <!-- This will keep the start and end dates separate -->
-            <xsl:choose>
-              <xsl:when test="@point">
-                <xsl:value-of select="concat($prefix, local-name(), '_', @point, '_s')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="concat($prefix, local-name(), '_s')"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:attribute>
-          <xsl:value-of select="text()"/>
-        </field>
-      </xsl:if>
     </xsl:for-each>
 
     <!-- Date Captured -->
