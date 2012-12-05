@@ -61,6 +61,8 @@
       <!-- bit of a hack so it can be sorted on... -->
       <field>
         <xsl:attribute name="name">
+          <!-- Add the parent titleInfo's 'type' attribute before the suffix if it exists -->
+          <!-- This keeps the arabic, translated, and transliterated titles separate -->
           <xsl:choose>
             <xsl:when test="../@type">
               <xsl:value-of select="concat($prefix, local-name(), '_', ../@type, '_mlt')"/>
@@ -520,6 +522,8 @@
       <xsl:if test="position() = 1"><!-- use the first for a sortable field -->
         <field>
           <xsl:attribute name="name">
+            <!-- Attach the name of the 'point' attribute to the date field's name -->
+            <!-- This will keep the start and end dates separate -->
             <xsl:choose>
               <xsl:when test="@point">
                 <xsl:value-of select="concat($prefix, local-name(), '_', @point, '_s')"/>
