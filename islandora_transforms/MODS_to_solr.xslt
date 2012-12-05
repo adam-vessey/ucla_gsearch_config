@@ -36,11 +36,13 @@
 
     <!--************************************ MODS subset for Bibliographies ******************************************-->
 
-    <!-- Main Title, with non-sorting prefixes -->
+    <!-- Titles, with non-sorting prefixes -->
     <!-- ...specifically, this avoids catching relatedItem titles -->
     <xsl:for-each select="mods:titleInfo/mods:title[normalize-space(text())]">
       <field>
         <xsl:attribute name="name">
+          <!-- Add the parent titleInfo's 'type' attribute before the suffix if it exists -->
+          <!-- This keeps the arabic, translated, and transliterated titles separate -->
           <xsl:choose>
             <xsl:when test="../@type">
               <xsl:value-of select="concat($prefix, local-name(), '_', ../@type, $suffix)"/>
@@ -499,8 +501,11 @@
 
     <!-- Date Issued (i.e. Journal Pub Date) -->
     <xsl:for-each select="mods:originInfo/mods:dateIssued[normalize-space(text())]">
+      <!-- Create a date field for Solr to facet -->
       <field>
         <xsl:attribute name="name">
+          <!-- Attach the name of the 'point' attribute to the date field's name -->
+          <!-- This will keep the start and end dates separate -->
           <xsl:choose>
             <xsl:when test="@point">
               <xsl:value-of select="concat($prefix, local-name(), '_', @point, '_dt')"/>
