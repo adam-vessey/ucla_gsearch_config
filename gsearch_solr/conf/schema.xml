@@ -329,7 +329,7 @@
  <uniqueKey>PID</uniqueKey>
 
  <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>dc.description</defaultSearchField>
+ <defaultSearchField>catch_all_fields_mt</defaultSearchField>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="OR"/>
