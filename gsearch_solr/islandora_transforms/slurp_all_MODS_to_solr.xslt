@@ -28,8 +28,9 @@
     <xsl:for-each select="$content/mods:mods/mods:*">
       <xsl:choose>
         <xsl:when
-          test="starts-with($PID, 'edu.ucla.library.specialCollections.losAngelesDailyNews')">
-          <xsl:apply-templates select="self::mods:*" mode="laDailyNews"/>
+          test="starts-with($PID, 'edu.ucla.library.specialCollections.losAngelesDailyNews')
+          | starts-with($PID, 'edu.ucla.library.universityArchives.historicPhotographs')">
+          <xsl:apply-templates select="self::mods:*" mode="CollectingLA"/>
         </xsl:when>
         <xsl:otherwise>
           <!-- we get the generic treatment -->
@@ -47,7 +48,7 @@
   -->
 
   <!-- We pull out cla topics for the visualization index -->
-  <xsl:template match="mods:subject[@authority='cla_topic']" mode="laDailyNews">
+  <xsl:template match="mods:subject[@authority='cla_topic']" mode="CollectingLA">
     <!-- cla_topic_mt field is created automatically from submitted _ms one -->
     <field name="cla_topic_ms">
       <xsl:value-of select="mods:topic"/>
@@ -62,7 +63,7 @@
     given special treatment...  It switches them to use the generic templates.
   -->
 
-  <xsl:template match="mods:*" mode="laDailyNews">
+  <xsl:template match="mods:*" mode="CollectingLA">
     <xsl:apply-templates select="self::mods:*"/>
   </xsl:template>
 
