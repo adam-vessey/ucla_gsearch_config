@@ -54,6 +54,18 @@
       <xsl:value-of select="mods:topic"/>
     </field>
   </xsl:template>
+  
+  <xsl:template match="mods:originInfo[mods:dateCreated[@encoding='iso8601']]" mode="CollectingLA">
+    <xsl:variable name="textValue">
+      <xsl:call-template name="get_ISO8601_date">
+        <xsl:with-param name="date" select="normalize-space(mods:dateCreated[@encoding='iso8601'])"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <field name="mods_dateCreated_dt">
+      <xsl:value-of select="$textValue"/>
+    </field>
+  </xsl:template>
 
   <!--
     SECTION 3:
