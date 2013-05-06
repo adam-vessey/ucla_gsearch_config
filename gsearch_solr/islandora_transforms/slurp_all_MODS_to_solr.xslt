@@ -39,6 +39,9 @@
           or starts-with($PID, 'edu.ucla.library.universityArchives.historicPhotographs')">
           <xsl:apply-templates select="self::mods:*" mode="CollectingLA"/>
         </xsl:when>
+        <xsl:when test="starts-with($PID, 'edu.ucla.library.dep.tahrir')">
+          <xsl:apply-templates select="self::mods:*" mode="Tahrir"/>
+        </xsl:when>
         <xsl:otherwise>
           <!-- we get the generic treatment -->
           <xsl:apply-templates select="self::mods:*"/>
@@ -73,6 +76,14 @@
       <xsl:value-of select="$textValue"/>
     </field>
   </xsl:template>
+  
+  <!-- Temporary workaround to allow us to separate out the Arabic subjects -->
+  <xsl:template match="mods:subject[@authority='local']" mode="Tahrir">
+    <!-- mods_topic_ar_mt is created automatically for us -->
+    <field name="mods_topic_ar_ms">
+      <xsl:value-of select="mods:topic"/>
+    </field>
+  </xsl:template>
 
   <!--
     SECTION 3:
@@ -83,6 +94,10 @@
   -->
 
   <xsl:template match="mods:*" mode="CollectingLA">
+    <xsl:apply-templates select="self::mods:*"/>
+  </xsl:template>
+  
+  <xsl:template match="mods:*" mode="Tahrir">
     <xsl:apply-templates select="self::mods:*"/>
   </xsl:template>
 
