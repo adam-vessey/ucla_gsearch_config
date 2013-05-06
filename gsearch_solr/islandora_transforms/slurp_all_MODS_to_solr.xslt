@@ -24,6 +24,13 @@
     name="index_MODS">
     <xsl:param name="content"/>
 
+    <!-- encode the whole mods record into a solr field -->
+    <field name="mods_xml">
+      <xsl:text disable-output-escaping="yes">&lt;![CDATA[</xsl:text>
+      <xsl:copy-of select="$content/mods:mods"/>
+      <xsl:text disable-output-escaping="yes">]]&gt;</xsl:text>
+    </field>
+
     <!-- xslt 1.0 doesn't allow use of multiple modes; we need wrapper code -->
     <xsl:for-each select="$content/mods:mods/mods:*">
       <xsl:choose>
