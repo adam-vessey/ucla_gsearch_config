@@ -260,6 +260,9 @@
      --> 
     <fieldtype name="ignored" stored="false" indexed="false" class="solr.StrField" /> 
 
+    <fieldtype name="mods_xml" stored="true" indexed="false" class="solr.StrField" multiValued="false"/>
+    <fieldtype name="dc_xml" stored="true" indexed="false" class="solr.StrField" multiValued="false"/>
+
  </types>
 
 
