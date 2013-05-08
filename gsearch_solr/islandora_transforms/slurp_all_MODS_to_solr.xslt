@@ -108,9 +108,9 @@
     Changing these changes the default processing for all MODS collections.
   -->
 
-  <!-- Generic non-date fields -->
+  <!-- Generic non-date fields; descends down to text level and creates field for that -->
   <xsl:template
-    match="mods:*[not(@type='date')][not(contains(translate(local-name(), 'D', 'd'), 'date')) or (self::mods:dateCreated)][normalize-space(text())]">
+    match="mods:*[not(@type='date')][not(contains(translate(local-name(), 'D', 'd'), 'date')) or (self::mods:dateCreated)][normalize-space(text())][not(ancestor::mods:relatedItem)]">
     <field>
       <xsl:attribute name="name">
         <xsl:choose>
