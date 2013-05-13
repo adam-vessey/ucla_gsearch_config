@@ -36,6 +36,7 @@
     <!-- Year ranges; but for now, we just index first year of range -->
     <xsl:variable name="pattern4">[0-9]{4}/[0-9]{4}</xsl:variable>
     <xsl:variable name="pattern5">[0-9]{4}-[0-9]{2}-[0-9]{2}/[0-9]{4}-[0-9]{2}-[0-9]{2}</xsl:variable>
+    <xsl:variable name="pattern6">[0-9]{4}-[0-9]{2}/[0-9]{4}-[0-9]{2}</xsl:variable>
 
     <!-- Have JODA or fail silently. -->
 
@@ -57,6 +58,10 @@
         </xsl:when>
         <xsl:when test="java:matches($date, $pattern5)">
           <xsl:variable name="dp" select="java:org.joda.time.format.DateTimeFormat.forPattern('yyyy-MM-dd')"/>
+          <xsl:value-of select="java:parseDateTime($dp, substring-before($date, '/'))"/>
+        </xsl:when>
+        <xsl:when test="java:matches($date, $pattern6)">
+          <xsl:variable name="dp" select="java:org.joda.time.format.DateTimeFormat.forPattern('yyyy-MM')"/>
           <xsl:value-of select="java:parseDateTime($dp, substring-before($date, '/'))"/>
         </xsl:when>
         <xsl:otherwise>
