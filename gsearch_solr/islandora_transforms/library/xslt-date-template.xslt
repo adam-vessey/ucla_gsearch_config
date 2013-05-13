@@ -33,10 +33,13 @@
     <xsl:variable name="pattern3">([0-9]{1,2}/)?([0-9]{1,2}/)?([0-9]{4})
       ([0-9]{1,2}:[0-9]{2})</xsl:variable>
 
-    <!-- Year ranges; but for now, we just index first year of range -->
+    <!-- Mirrored year ranges; but for now, we just index first year of range -->
     <xsl:variable name="pattern4">[0-9]{4}/[0-9]{4}</xsl:variable>
     <xsl:variable name="pattern5">[0-9]{4}-[0-9]{2}-[0-9]{2}/[0-9]{4}-[0-9]{2}-[0-9]{2}</xsl:variable>
     <xsl:variable name="pattern6">[0-9]{4}-[0-9]{2}/[0-9]{4}-[0-9]{2}</xsl:variable>
+    
+    <!-- A "catch all" for other probable date ranges and take the start of them -->
+    <xsl:variable name="pattern7">([0-9]{4})(-[0-9]{2})?(-[0-9]{2})?/.*</xsl:variable>
 
     <!-- Have JODA or fail silently. -->
 
@@ -63,6 +66,9 @@
         <xsl:when test="java:matches($date, $pattern6)">
           <xsl:variable name="dp" select="java:org.joda.time.format.DateTimeFormat.forPattern('yyyy-MM')"/>
           <xsl:value-of select="java:parseDateTime($dp, substring-before($date, '/'))"/>
+        </xsl:when>
+        <xsl:when test="java:matches($date, $pattern7)">
+          <xsl:value-of select="substring-before($date, '/')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$date"/>
