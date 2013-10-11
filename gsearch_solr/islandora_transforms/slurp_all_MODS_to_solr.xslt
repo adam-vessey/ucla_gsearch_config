@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:foxml="info:fedora/fedora-system:def/foxml#"
-  xmlns:mods="http://www.loc.gov/mods/v3" exclude-result-prefixes="mods">
+  xmlns:mods="http://www.loc.gov/mods/v3"  xmlns:java="http://xml.apache.org/xalan/java" exclude-result-prefixes="mods">
   <xsl:include
     href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/config/index/gsearch_solr/islandora_transforms/library/xslt-date-template.xslt"/>
 
@@ -66,7 +66,11 @@
   </xsl:template>
   
   <xsl:template match="mods:originInfo[mods:dateCreated[@encoding='iso8601']]" mode="CollectingLA">
-    <xsl:variable name="textValue">
+    <xsl:variable name="dateStart"
+      select="java:edu.ucla.library.IsoToSolrDateConverter.getStartDateFromIsoDateString(normalize-space(mods:dateCreated[@encoding='iso8601']))" />
+    <xsl:variable name="dateEnd"
+      select="java:edu.ucla.library.IsoToSolrDateConverter.getEndDateFromIsoDateString(normalize-space(mods:dateCreated[@encoding='iso8601']))" />
+<!--    <xsl:variable name="textValue">
       <xsl:call-template name="get_ISO8601_date">
         <xsl:with-param name="date" select="normalize-space(mods:dateCreated[@encoding='iso8601'])"/>
       </xsl:call-template>
@@ -74,6 +78,15 @@
 
     <field name="mods_dateCreated_dt">
       <xsl:value-of select="$textValue"/>
+    </field>-->
+    <field name="mods_dateCreated_dt">
+      <xsl:value-of select="$dateStart"/>
+    </field>
+    <field name="mods_dateCreated_start_dt">
+      <xsl:value-of select="$dateStart"/>
+    </field>
+    <field name="mods_dateCreated_end_dt">
+      <xsl:value-of select="$dateEnd"/>
     </field>
   </xsl:template>
   
