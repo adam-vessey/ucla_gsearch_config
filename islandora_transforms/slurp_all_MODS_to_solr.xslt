@@ -36,7 +36,8 @@
       <xsl:choose>
         <xsl:when
           test="starts-with($PID, 'edu.ucla.library.specialCollections.losAngelesDailyNews')
-          or starts-with($PID, 'edu.ucla.library.universityArchives.historicPhotographs')">
+          or starts-with($PID, 'edu.ucla.library.universityArchives.historicPhotographs')
+          or starts-with($PID, 'edu.ucla.library.specialCollections.latimes')">
           <xsl:apply-templates select="self::mods:*" mode="CollectingLA"/>
         </xsl:when>
         <xsl:when test="starts-with($PID, 'edu.ucla.library.dep.tahrir')">
