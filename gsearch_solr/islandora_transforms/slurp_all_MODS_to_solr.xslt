@@ -71,15 +71,6 @@
       select="java:edu.ucla.library.IsoToSolrDateConverter.getStartDateFromIsoDateString(normalize-space(mods:dateCreated[@encoding='iso8601']))" />
     <xsl:variable name="dateEnd"
       select="java:edu.ucla.library.IsoToSolrDateConverter.getEndDateFromIsoDateString(normalize-space(mods:dateCreated[@encoding='iso8601']))" />
-<!--    <xsl:variable name="textValue">
-      <xsl:call-template name="get_ISO8601_date">
-        <xsl:with-param name="date" select="normalize-space(mods:dateCreated[@encoding='iso8601'])"/>
-      </xsl:call-template>
-    </xsl:variable>
-
-    <field name="mods_dateCreated_dt">
-      <xsl:value-of select="$textValue"/>
-    </field>-->
     <field name="mods_dateCreated_dt">
       <xsl:value-of select="$dateStart"/>
     </field>
@@ -129,10 +120,26 @@
       <xsl:attribute name="name">
         <xsl:choose>
           <xsl:when test="../@type">
-            <xsl:value-of select="concat($modsPrefix, local-name(), '_', ../@type, $modsSuffix)"/>
+            <xsl:choose>
+              <xsl:when test="./ancestor-or-self::*[@lang]">
+                <xsl:variable name="modsLang" select="./ancestor-or-self::*[@lang][1]/@lang"/>
+                <xsl:value-of select="concat($modsPrefix, local-name(), '_', ../@type, '_', $modsLang, $modsSuffix)"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat($modsPrefix, local-name(), '_', ../@type, $modsSuffix)"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat($modsPrefix, local-name(), $modsSuffix)"/>
+            <xsl:choose>
+              <xsl:when test="./ancestor-or-self::*[@lang]">
+                <xsl:variable name="modsLang" select="./ancestor-or-self::*[@lang][1]/@lang"/>
+                <xsl:value-of select="concat($modsPrefix, local-name(), '_', $modsLang, $modsSuffix)"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat($modsPrefix, local-name(), $modsSuffix)"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
