@@ -5,7 +5,6 @@
   <xsl:include
     href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/library/xslt-date-template.xslt"/>
 
-  <xsl:variable name="PID" select="/foxml:digitalObject/@PID"/>
   <xsl:variable name="modsPrefix">mods_</xsl:variable>
   <xsl:variable name="modsSuffix">_ms</xsl:variable>
 
