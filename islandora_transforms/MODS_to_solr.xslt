@@ -35,12 +35,21 @@
 
     <!--************************************ MODS subset for Bibliographies ******************************************-->
 
-    <!-- Main Title, with non-sorting prefixes -->
+    <!-- Titles, with non-sorting prefixes -->
     <!-- ...specifically, this avoids catching relatedItem titles -->
-    <xsl:for-each select="(mods:titleInfo/mods:title[normalize-space(text())])[1]">
+    <xsl:for-each select="mods:titleInfo/mods:title[normalize-space(text())]">
       <field>
         <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, local-name(), $suffix)"/>
+          <!-- Add the parent titleInfo's 'type' attribute before the suffix if it exists -->
+          <!-- This keeps the arabic, translated, and transliterated titles separate -->
+          <xsl:choose>
+            <xsl:when test="../@type">
+              <xsl:value-of select="concat($prefix, local-name(), '_', ../@type, $suffix)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($prefix, local-name(), $suffix)"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:attribute>
         <xsl:if test="../mods:nonSort">
           <xsl:value-of select="../mods:nonSort/text()"/>
@@ -51,7 +60,16 @@
       <!-- bit of a hack so it can be sorted on... -->
       <field>
         <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, local-name(), '_mlt')"/>
+          <!-- Add the parent titleInfo's 'type' attribute before the suffix if it exists -->
+          <!-- This keeps the arabic, translated, and transliterated titles separate -->
+          <xsl:choose>
+            <xsl:when test="../@type">
+              <xsl:value-of select="concat($prefix, local-name(), '_', ../@type, '_mlt')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($prefix, local-name(), '_mlt')"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:attribute>
         <xsl:if test="../mods:nonSort">
           <xsl:value-of select="../mods:nonSort/text()"/>
@@ -484,20 +502,22 @@
 
     <!-- Date Issued (i.e. Journal Pub Date) -->
     <xsl:for-each select="mods:originInfo/mods:dateIssued[normalize-space(text())]">
+      <!-- Create a date field for Solr to facet -->
       <field>
         <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, local-name(), $suffix)"/>
+          <!-- Attach the name of the 'point' attribute to the date field's name -->
+          <!-- This will keep the start and end dates separate -->
+          <xsl:choose>
+            <xsl:when test="@point">
+              <xsl:value-of select="concat($prefix, local-name(), '_', @point, '_dt')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($prefix, local-name(), '_dt')"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:attribute>
         <xsl:value-of select="text()"/>
       </field>
-      <xsl:if test="position() = 1"><!-- use the first for a sortable field -->
-        <field>
-          <xsl:attribute name="name">
-            <xsl:value-of select="concat($prefix, local-name(), '_s')"/>
-          </xsl:attribute>
-          <xsl:value-of select="text()"/>
-        </field>
-      </xsl:if>
     </xsl:for-each>
 
     <!-- Date Captured -->
@@ -575,10 +595,10 @@
     </xsl:for-each>
 
     <!-- Languague Term -->
-    <xsl:for-each select="mods:language/mods:languageTerm[@authority='iso639-2b' and @type='code'][normalize-space(text())]">
+    <xsl:for-each select="mods:language/mods:languageTerm[normalize-space(text())]">
       <field>
         <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, local-name(), $suffix)"/>
+          <xsl:value-of select="concat($prefix, local-name(), $suffix)"/> 
         </xsl:attribute>
         <xsl:value-of select="text()"/>
       </field>
